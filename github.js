@@ -32,7 +32,7 @@
       }));
     };
   } else {
-    b64encode = require('base64').encode;
+    b64encode = require('js-base64').Base64.encode;
   }
   
   //prefer native XMLHttpRequest always
