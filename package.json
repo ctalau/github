@@ -41,7 +41,8 @@
     "url": "https://github.com/michael/github/issues"
   },
   "browser": {
-    "xmlhttprequest": false
+    "xmlhttprequest": false,
+    "base64": false
   },
   "testling": {
     "files": "test/test.*.js",

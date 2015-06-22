@@ -16,17 +16,23 @@
   // Initial Setup
   // -------------
 
-  var XMLHttpRequest,  _;
+  var XMLHttpRequest,  _, b64encode;
   /* istanbul ignore else  */
   if (typeof exports !== 'undefined') {
       XMLHttpRequest = require('xmlhttprequest').XMLHttpRequest;
       _ = require('underscore');
-      if (typeof btoa === 'undefined') {
-        var btoa = require('btoa'); //jshint ignore:line
-      }
-      
   } else { 
       _ = window._; 
+  }
+
+  if (typeof window !== 'undefined') {
+    b64encode = function(str) {
+      return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, function(match, p1) {
+        return String.fromCharCode('0x' + p1);
+      }));
+    };
+  } else {
+    b64encode = require('base64').encode;
   }
   
   //prefer native XMLHttpRequest always
@@ -76,7 +82,7 @@
 
       xhr.setRequestHeader('Content-Type','application/json;charset=UTF-8');
       if ((options.token) || (options.username && options.password)) {
-        var authorization = options.token ? 'token ' + options.token : 'Basic ' + btoa(options.username + ':' + options.password);
+        var authorization = options.token ? 'token ' + options.token : 'Basic ' + b64encode(options.username + ':' + options.password);
         xhr.setRequestHeader('Authorization', authorization);
       }
       if (data) {
@@ -410,7 +416,7 @@
           };
         } else {
           	content = {
-              "content": btoa(String.fromCharCode.apply(null, new Uint8Array(content))),
+              "content": b64encode(String.fromCharCode.apply(null, new Uint8Array(content))),
               "encoding": "base64"
             };
           }
@@ -668,7 +674,7 @@
           if (err && err.error !== 404) return cb(err);
           _request("PUT", repoPath + "/contents/" + encodeURI(path), {
             message: message,
-            content: btoa(content),
+            content: b64encode(content),
             branch: branch,
             sha: sha
           }, cb);
