@@ -21,18 +21,15 @@
   if (typeof exports !== 'undefined') {
       XMLHttpRequest = require('xmlhttprequest').XMLHttpRequest;
       _ = require('underscore');
+      b64encode = require('js-base64').Base64.encode;
   } else { 
-      _ = window._; 
-  }
-
-  if (typeof window !== 'undefined') {
-    b64encode = function(str) {
+      _ = window._;
+     b64encode = function(str) {
       return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, function(match, p1) {
         return String.fromCharCode('0x' + p1);
       }));
     };
-  } else {
-    b64encode = require('js-base64').Base64.encode;
+  }
   }
   
   //prefer native XMLHttpRequest always
@@ -54,7 +51,14 @@
     function _request(method, path, data, cb, raw, sync) {
       function getURL() {
         var url = path.indexOf('//') >= 0 ? path : API_URL + path;
-        return url + ((/\?/).test(url) ? '&' : '?') + (new Date()).getTime();
+        url += ((/\?/).test(url) ? '&' : '?');
+        // Fix #195 about XMLHttpRequest.send method and GET/HEAD request
+//        if (_.isObject(data) && _.indexOf(['GET', 'HEAD'], method) > -1) {
+//          url += '&' + _.map(data, function (v, k) {
+//            return k + '=' + v;
+//          }).join('&');
+//        }
+        return url + '&' + (new Date()).getTime();
       }
 
       var xhr = new XMLHttpRequest();
