@@ -52,11 +52,13 @@
         var url = path.indexOf('//') >= 0 ? path : API_URL + path;
         url += ((/\?/).test(url) ? '&' : '?');
         // Fix #195 about XMLHttpRequest.send method and GET/HEAD request
+/*
         if (_.isObject(data) && _.indexOf(['GET', 'HEAD'], method) > -1) {
           url += '&' + _.map(data, function (v, k) {
             return k + '=' + v;
           }).join('&');
         }
+*/
         return url + '&' + (new Date()).getTime();
       }
 
