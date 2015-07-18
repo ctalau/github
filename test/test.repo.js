@@ -58,6 +58,7 @@ test("Repo API", function(t) {
 
     t.test('repo.read', function(q) {
         repo.read('master', 'README.md', function(err, res) {
+            console.log(res);
             q.ok(res.indexOf('##Setup') !== -1, true, 'Returned REAMDE');
             q.end();
         });

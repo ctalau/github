@@ -24,12 +24,11 @@
       b64encode = require('js-base64').Base64.encode;
   } else { 
       _ = window._;
-     b64encode = function(str) {
-      return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, function(match, p1) {
-        return String.fromCharCode('0x' + p1);
-      }));
-    };
-  }
+      b64encode = function(str) {
+          return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, function(match, p1) {
+              return String.fromCharCode('0x' + p1);
+          }));
+      };
   }
   
   //prefer native XMLHttpRequest always
